@@ -1,73 +1,137 @@
-# Welcome to your Lovable project
+# 🎓 English Learning Platform
 
-## Project info
+A comprehensive, modern web application designed for English language learning with interactive tools, live classes, and progress tracking.
 
-**URL**: https://lovable.dev/projects/46fa09bc-66f5-4c9b-8852-2be54ea05dce
+## 📋 Table of Contents
 
-## How can I edit this code?
+- [Overview](#overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Environment Configuration](#environment-configuration)
+- [Development](#development)
+- [Architecture](#architecture)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
 
-There are several ways of editing your application.
+## 🎯 Overview
 
-**Use Lovable**
+This English learning platform provides students with a complete learning experience including:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/46fa09bc-66f5-4c9b-8852-2be54ea05dce) and start prompting.
+- **Live Classes**: Real-time Zoom integration for interactive lessons
+- **Interactive Learning Tools**: Quizzes, flashcards, and progress tracking
+- **Content Management**: Video recordings, downloadable materials, and resources
+- **Progress Tracking**: Comprehensive analytics and achievement systems
+- **Mobile-First Design**: Responsive interface optimized for all devices
 
-Changes made via Lovable will be committed automatically to this repo.
+## ✨ Features
 
-**Use your preferred IDE**
+### 🎓 Learning Management
+- **Live Classes**: Zoom API integration for scheduled lessons
+- **Video Library**: YouTube integration for recorded sessions
+- **Interactive Quizzes**: Grammar assessments with explanations
+- **Flashcard System**: Vocabulary learning with spaced repetition
+- **Calendar View**: Visual schedule management
+- **Materials Hub**: File downloads and resource management
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 🔐 User Management
+- **Authentication**: Secure login/registration with Supabase Auth
+- **User Profiles**: Personalized learning dashboards
+- **Progress Tracking**: Achievement badges and learning analytics
+- **Subscription Management**: Stripe integration for payments
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🛠️ Technology Stack
 
-Follow these steps:
+- **React 18.3.1** with TypeScript
+- **Vite** - Fast build tool and dev server
+- **Tailwind CSS** - Utility-first CSS framework
+- **Shadcn UI** - High-quality component library
+- **Supabase** - Backend-as-a-Service (BaaS)
+- **Zoom API** - Video conferencing integration
+- **YouTube API** - Video content management
+- **Stripe** - Payment processing
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+## 📋 Prerequisites
+
+- **Node.js** (version 18.0 or higher)
+- **npm/yarn/bun** package manager
+- **Git** for version control
+
+## 🚀 Installation
+
+```bash
+# Clone the repository
 git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Copy environment template
+cp .env.example .env.local
+
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## ⚙️ Environment Configuration
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+See [environment-setup.md](environment-setup.md) for comprehensive environment configuration.
 
-**Use GitHub Codespaces**
+Required variables:
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_key
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 💻 Development
 
-## What technologies are used for this project?
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run lint         # Run ESLint
+npm run preview      # Preview production build
+```
 
-This project is built with:
+## 🏗️ Architecture
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+The application follows a modern React architecture with:
+- **Component-based design** using Shadcn UI
+- **Feature-based organization** for scalability
+- **Supabase integration** for backend services
+- **Real-time updates** for learning progress
 
-## How can I deploy this project?
+See [architecture.md](architecture.md) for detailed system architecture.
 
-Simply open [Lovable](https://lovable.dev/projects/46fa09bc-66f5-4c9b-8852-2be54ea05dce) and click on Share -> Publish.
+## 🚀 Deployment
 
-## Can I connect a custom domain to my Lovable project?
+### Using Lovable (Recommended)
+1. Open your [Lovable Project](https://lovable.dev/projects/46fa09bc-66f5-4c9b-8852-2be54ea05dce)
+2. Click "Share" → "Publish"
 
-Yes, you can!
+### Manual Deployment
+- **Vercel**: `vercel --prod`
+- **Netlify**: Upload `dist/` folder
+- **Self-hosting**: Serve `dist/` folder
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🤝 Contributing
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/amazing-feature`
+3. Make changes and run: `npm run lint`
+4. Commit changes: `git commit -m 'Add amazing feature'`
+5. Push and open Pull Request
+
+## 📚 Documentation
+
+- [File Structure Guide](filesExplainer.md)
+- [Architecture Documentation](architecture.md)
+- [Scripts Reference](scripts.md)
+- [Structure Recommendations](structure-recommendations.md)
+- [Environment Setup](environment-setup.md)
+
+---
+
+**Built with ❤️ for English learners worldwide**
