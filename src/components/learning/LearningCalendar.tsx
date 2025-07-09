@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Users, Video } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface Meeting {
   id: string;
@@ -15,12 +17,33 @@ interface Meeting {
 }
 
 interface LearningCalendarProps {
-  meetings: Meeting[];
+  meetings?: Meeting[]; // Make it optional since we'll fetch our own data
   onJoinMeeting: (url: string) => void;
 }
 
-export const LearningCalendar = ({ meetings, onJoinMeeting }: LearningCalendarProps) => {
+export const LearningCalendar = ({ onJoinMeeting }: LearningCalendarProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const { toast } = useToast();
+
+  // Fetch meetings data
+  useEffect(() => {
+    const fetchMeetings = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('zoom-meetings', {
+          body: { action: 'list' }
+        });
+
+        if (error) throw error;
+        setMeetings(data.meetings || []);
+      } catch (error) {
+        console.error('Error fetching meetings for calendar:', error);
+        // Don't show toast error here as it might be redundant with LiveClasses component
+      }
+    };
+
+    fetchMeetings();
+  }, []);
 
   const selectedDateMeetings = meetings.filter(meeting => {
     const meetingDate = new Date(meeting.startTime);
