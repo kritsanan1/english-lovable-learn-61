@@ -5,8 +5,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Generate JWT token for Zoom API
-function generateZoomToken() {
+// Generate JWT token for Zoom API using proper HMAC-SHA256
+async function generateZoomToken() {
   const apiKey = Deno.env.get('ZOOM_API_KEY');
   const apiSecret = Deno.env.get('ZOOM_API_SECRET');
   
@@ -14,23 +14,36 @@ function generateZoomToken() {
     throw new Error('Zoom API credentials not configured');
   }
 
-  const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
+  const header = { alg: 'HS256', typ: 'JWT' };
   const now = Math.floor(Date.now() / 1000);
   
-  const payload = btoa(JSON.stringify({
+  const payload = {
     iss: apiKey,
     exp: now + 3600 // 1 hour expiration
-  }));
+  };
 
-  const signature = btoa(
-    Array.from(
-      new Uint8Array(
-        new TextEncoder().encode(`${header}.${payload}`)
-      )
-    ).map(b => String.fromCharCode(b)).join('')
+  const headerB64 = btoa(JSON.stringify(header)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+  const payloadB64 = btoa(JSON.stringify(payload)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+  
+  const data = `${headerB64}.${payloadB64}`;
+  
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(apiSecret);
+  const messageData = encoder.encode(data);
+  
+  const cryptoKey = await crypto.subtle.importKey(
+    'raw',
+    keyData,
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
   );
-
-  return `${header}.${payload}.${signature}`;
+  
+  const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+  const signatureB64 = btoa(String.fromCharCode(...new Uint8Array(signature)))
+    .replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+  
+  return `${data}.${signatureB64}`;
 }
 
 serve(async (req) => {
@@ -41,7 +54,7 @@ serve(async (req) => {
 
   try {
     const { action = 'list', meetingData } = await req.json();
-    const token = generateZoomToken();
+    const token = await generateZoomToken();
 
     console.log('Zoom API action:', action);
 

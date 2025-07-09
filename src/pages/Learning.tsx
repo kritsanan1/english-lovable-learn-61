@@ -5,9 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Play, Calendar, Clock, FileText, Video, Users, Loader2 } from "lucide-react";
+import { Play, Calendar, Clock, FileText, Video, Users, Loader2, BookOpen, Brain } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { LearningCalendar } from "@/components/learning/LearningCalendar";
+import { InteractiveQuiz } from "@/components/learning/InteractiveQuiz";
+import { FlashcardDeck } from "@/components/learning/FlashcardDeck";
+import { MaterialsManager } from "@/components/learning/MaterialsManager";
 
 const Learning = () => {
   const [activeTab, setActiveTab] = useState("live");
@@ -80,22 +84,6 @@ const Learning = () => {
     fetchRecordings();
   }, []);
 
-  const materials = [
-    {
-      id: 1,
-      title: "A1 Level Workbook",
-      type: "PDF",
-      size: "2.5 MB",
-      downloadLink: "#"
-    },
-    {
-      id: 2,
-      title: "Vocabulary List - Week 1",
-      type: "PDF",
-      size: "1.2 MB", 
-      downloadLink: "#"
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -119,10 +107,13 @@ const Learning = () => {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-6">
               <TabsTrigger value="live">Live Classes</TabsTrigger>
               <TabsTrigger value="recordings">Recordings</TabsTrigger>
               <TabsTrigger value="materials">Materials</TabsTrigger>
+              <TabsTrigger value="calendar">Calendar</TabsTrigger>
+              <TabsTrigger value="quiz">Quiz</TabsTrigger>
+              <TabsTrigger value="flashcards">Flashcards</TabsTrigger>
             </TabsList>
 
             <TabsContent value="live" className="mt-8">
@@ -266,25 +257,25 @@ const Learning = () => {
             </TabsContent>
 
             <TabsContent value="materials" className="mt-8">
-              <div className="grid gap-4">
-                {materials.map((material) => (
-                  <Card key={material.id}>
-                    <CardContent className="flex items-center justify-between p-6">
-                      <div className="flex items-center gap-4">
-                        <FileText className="w-8 h-8 text-primary" />
-                        <div>
-                          <h3 className="font-semibold">{material.title}</h3>
-                          <p className="text-sm text-muted-foreground">
-                            {material.type} • {material.size}
-                          </p>
-                        </div>
-                      </div>
-                      <Button variant="outline">
-                        Download
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
+              <MaterialsManager />
+            </TabsContent>
+
+            <TabsContent value="calendar" className="mt-8">
+              <LearningCalendar 
+                meetings={meetings}
+                onJoinMeeting={(url) => window.open(url, '_blank')}
+              />
+            </TabsContent>
+
+            <TabsContent value="quiz" className="mt-8">
+              <div className="max-w-2xl mx-auto">
+                <InteractiveQuiz />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="flashcards" className="mt-8">
+              <div className="max-w-2xl mx-auto">
+                <FlashcardDeck />
               </div>
             </TabsContent>
           </Tabs>
