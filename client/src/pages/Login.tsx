@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { supabase } from '@/integrations/supabase/client';
-import { useNavigate, Link } from 'react-router-dom';
+
+import { useLocation, Link } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
 import Navigation from '@/components/Navigation';
 
@@ -12,7 +12,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -20,23 +20,23 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      // For demo purposes, simulate successful login
+      // This should be replaced with actual authentication
+      if (email && password) {
 
-      if (error) throw error;
-
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully logged in.",
-      });
-      
-      navigate('/dashboard');
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully logged in.",
+        });
+        
+        setLocation('/dashboard');
+      } else {
+        throw new Error('Please fill in all fields');
+      }
     } catch (error: any) {
       toast({
         title: "Login failed",
-        description: error.message,
+        description: error.message || 'Please check your credentials',
         variant: "destructive",
       });
     } finally {

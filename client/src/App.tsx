@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Router, Route } from "wouter";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
@@ -29,28 +29,28 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/instructors" element={<Instructors />} />
-            <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/learning" element={<Learning />} />
-            <Route path="/level-test" element={<LevelTest />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/payment-success" element={<PaymentSuccess />} />
-            <Route path="/payment-failed" element={<PaymentFailed />} />
-            <Route path="/dashboard" element={
+        <Router>
+          <Route path="/" component={Index} />
+          <Route path="/about" component={About} />
+          <Route path="/instructors" component={Instructors} />
+          <Route path="/pricing" component={PricingPage} />
+          <Route path="/learning" component={Learning} />
+          <Route path="/level-test" component={LevelTest} />
+          <Route path="/faq" component={FAQ} />
+          <Route path="/contact" component={Contact} />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
+          <Route path="/payment-success" component={PaymentSuccess} />
+          <Route path="/payment-failed" component={PaymentFailed} />
+          <Route path="/dashboard">
+            {() => (
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
-            } />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+            )}
+          </Route>
+          <Route path="/:rest*" component={NotFound} />
+        </Router>
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>

@@ -1,9 +1,9 @@
 
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "wouter";
 
 const Hero = () => {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
 
   return (
     <section className="relative bg-gradient-to-b from-blue-50 to-white py-20 lg:py-32">
@@ -21,7 +21,7 @@ const Hero = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button 
                 size="lg"
-                onClick={() => navigate("/pricing")}
+                onClick={() => setLocation("/pricing")}
                 className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 text-lg"
               >
                 View Plans & Pricing
@@ -29,7 +29,7 @@ const Hero = () => {
               <Button 
                 size="lg"
                 variant="outline"
-                onClick={() => navigate("/level-test")}
+                onClick={() => setLocation("/level-test")}
                 className="border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-3 text-lg"
               >
                 Take Level Test

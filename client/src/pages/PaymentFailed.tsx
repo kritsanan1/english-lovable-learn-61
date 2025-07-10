@@ -3,10 +3,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { XCircle } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 
 export default function PaymentFailed() {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
 
   return (
     <div className="min-h-screen bg-background">
@@ -31,19 +31,19 @@ export default function PaymentFailed() {
             </p>
             
             <div className="pt-4 space-y-2">
-              <Button onClick={() => navigate('/pricing')} className="w-full">
+              <Button onClick={() => setLocation('/pricing')} className="w-full">
                 Try Again
               </Button>
               <Button
                 variant="outline"
-                onClick={() => navigate('/contact')}
+                onClick={() => setLocation('/contact')}
                 className="w-full"
               >
                 Contact Support
               </Button>
               <Button
                 variant="ghost"
-                onClick={() => navigate('/')}
+                onClick={() => setLocation('/')}
                 className="w-full"
               >
                 Back to Home

@@ -2,12 +2,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "wouter";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const { user } = useAuth();
 
   const navItems = [
@@ -27,7 +27,7 @@ const Navigation = () => {
           {/* Logo */}
           <div 
             className="flex items-center cursor-pointer"
-            onClick={() => navigate("/")}
+            onClick={() => setLocation("/")}
           >
             <div className="text-2xl font-bold text-blue-600">Kru English</div>
           </div>
@@ -37,7 +37,7 @@ const Navigation = () => {
             {navItems.map((item) => (
               <button
                 key={item.name}
-                onClick={() => navigate(item.path)}
+                onClick={() => setLocation(item.path)}
                 className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
               >
                 {item.name}
@@ -45,7 +45,7 @@ const Navigation = () => {
             ))}
             {user ? (
               <Button 
-                onClick={() => navigate("/dashboard")}
+                onClick={() => setLocation("/dashboard")}
                 className="bg-primary hover:bg-primary/90 text-primary-foreground"
               >
                 <User className="h-4 w-4 mr-2" />
@@ -55,12 +55,12 @@ const Navigation = () => {
               <>
                 <Button 
                   variant="outline"
-                  onClick={() => navigate("/login")}
+                  onClick={() => setLocation("/login")}
                 >
                   Login
                 </Button>
                 <Button 
-                  onClick={() => navigate("/pricing")}
+                  onClick={() => setLocation("/pricing")}
                   className="bg-orange-500 hover:bg-orange-600 text-white"
                 >
                   Start Learning
@@ -89,7 +89,7 @@ const Navigation = () => {
                 <button
                   key={item.name}
                   onClick={() => {
-                    navigate(item.path);
+                    setLocation(item.path);
                     setIsOpen(false);
                   }}
                   className="block w-full text-left px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
@@ -100,7 +100,7 @@ const Navigation = () => {
               {user ? (
                 <Button 
                   onClick={() => {
-                    navigate("/dashboard");
+                    setLocation("/dashboard");
                     setIsOpen(false);
                   }}
                   className="w-full mt-2 bg-primary hover:bg-primary/90 text-primary-foreground"
@@ -113,7 +113,7 @@ const Navigation = () => {
                   <Button 
                     variant="outline"
                     onClick={() => {
-                      navigate("/login");
+                      setLocation("/login");
                       setIsOpen(false);
                     }}
                     className="w-full mt-2"
@@ -122,7 +122,7 @@ const Navigation = () => {
                   </Button>
                   <Button 
                     onClick={() => {
-                      navigate("/pricing");
+                      setLocation("/pricing");
                       setIsOpen(false);
                     }}
                     className="w-full mt-2 bg-orange-500 hover:bg-orange-600 text-white"

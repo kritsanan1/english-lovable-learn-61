@@ -1,5 +1,5 @@
 import { useAuth } from '@/contexts/AuthContext';
-import { Navigate } from 'react-router-dom';
+import { Redirect } from 'wouter';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -18,11 +18,11 @@ export default function ProtectedRoute({ children, requireSubscription = false }
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Redirect to="/login" />;
   }
 
   if (requireSubscription && !subscribed) {
-    return <Navigate to="/pricing" replace />;
+    return <Redirect to="/pricing" />;
   }
 
   return <>{children}</>;

@@ -13,7 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns";
 import { CalendarIcon, Loader2, Send, CheckCircle, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+
 import {
   Form,
   FormControl,
@@ -63,15 +63,20 @@ export const ContactForm = ({ onSuccess }: ContactFormProps) => {
     setSubmitStatus('idle');
 
     try {
-      const { data: result, error } = await supabase.functions.invoke('contact-inquiries', {
-        body: {
+      const response = await fetch('/api/contact-inquiries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           ...data,
           appointment_date: data.appointment_date?.toISOString(),
-        }
+        }),
       });
 
-      if (error) {
-        throw error;
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit contact form');
       }
 
       setSubmitStatus('success');

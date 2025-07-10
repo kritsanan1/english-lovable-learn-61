@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/integrations/supabase/client';
+
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 
 interface PaymentButtonProps {
   planName: string;
@@ -25,31 +25,38 @@ export default function PaymentButton({
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
 
   const handlePayment = async () => {
     if (!user) {
-      navigate('/login');
+      setLocation('/login');
       return;
     }
 
     setLoading(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: {
+      const response = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           planName,
           price: parseInt(price),
           originalPrice: parseInt(originalPrice),
           duration,
-        },
+        }),
       });
 
-      if (error) throw error;
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to create checkout');
+
+
 
       if (data?.url) {
-        // Open Stripe checkout in a new tab
-        window.open(data.url, '_blank');
+        // Redirect to checkout success page
+        setLocation(data.url);
       }
     } catch (error: any) {
       toast({

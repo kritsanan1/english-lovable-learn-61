@@ -1,10 +1,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "wouter";
 
 const Pricing = () => {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
 
   const plans = [
     {

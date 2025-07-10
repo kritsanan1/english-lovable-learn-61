@@ -5,11 +5,11 @@ import { CheckCircle } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 
 export default function PaymentSuccess() {
   const { checkSubscription } = useAuth();
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
 
   useEffect(() => {
     // Refresh subscription status after successful payment
@@ -45,12 +45,12 @@ export default function PaymentSuccess() {
             </ul>
             
             <div className="pt-4 space-y-2">
-              <Button onClick={() => navigate('/dashboard')} className="w-full">
+              <Button onClick={() => setLocation('/dashboard')} className="w-full">
                 Go to Dashboard
               </Button>
               <Button
                 variant="outline"
-                onClick={() => navigate('/')}
+                onClick={() => setLocation('/')}
                 className="w-full"
               >
                 Back to Home

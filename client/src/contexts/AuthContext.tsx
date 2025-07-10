@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+
+interface User {
+  id: string;
+  email?: string;
+  username?: string;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -22,11 +26,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
 
   const checkSubscription = async () => {
-    if (!user) return;
+    if (!user?.email) return;
     
     try {
-      const { data } = await supabase.functions.invoke('check-subscription');
-      if (data) {
+      const response = await fetch('/api/check-subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: user.email }),
+      });
+      
+      const data = await response.json();
+      if (response.ok) {
         setSubscribed(data.subscribed || false);
         setSubscriptionTier(data.subscription_tier || null);
         setSubscriptionEnd(data.subscription_end || null);
@@ -37,29 +49,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setUser(session?.user ?? null);
-        setLoading(false);
-        
-        if (session?.user) {
-          await checkSubscription();
-        } else {
-          setSubscribed(false);
-          setSubscriptionTier(null);
-          setSubscriptionEnd(null);
-        }
-      }
-    );
-
-    return () => subscription.unsubscribe();
+    // For now, simulate no user logged in
+    // This can be extended with actual authentication logic
+    setUser(null);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -69,7 +62,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [user]);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    setUser(null);
+    setSubscribed(false);
+    setSubscriptionTier(null);
+    setSubscriptionEnd(null);
   };
 
   const value = {

@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Play, Video, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+
 import { useToast } from "@/hooks/use-toast";
 
 interface Recording {
@@ -24,25 +24,27 @@ export const RecordingsSection = () => {
   const fetchRecordings = async () => {
     setLoadingRecordings(true);
     try {
-      const { data, error } = await supabase.functions.invoke('youtube-videos', {
-        body: { 
-          channelId: 'UCJ8cRnp3i1e8KMaO19q-dzA', // Replace with your channel ID
-          maxResults: 10 
+      // Mock data for demonstration - replace with actual API call
+      const mockRecordings = [
+        {
+          id: "1",
+          title: "English Conversation Practice - Beginner Level",
+          duration: "45:30",
+          date: new Date().toLocaleDateString(),
+          youtubeId: "dQw4w9WgXcQ", // Demo video ID
+          thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg"
+        },
+        {
+          id: "2", 
+          title: "Grammar Fundamentals - Present Tense",
+          duration: "32:15",
+          date: new Date(Date.now() - 86400000).toLocaleDateString(),
+          youtubeId: "dQw4w9WgXcQ",
+          thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg"
         }
-      });
-
-      if (error) throw error;
+      ];
       
-      const formattedRecordings = data.videos?.map((video: any) => ({
-        id: video.id,
-        title: video.title,
-        duration: "Video", // YouTube API doesn't provide duration in search
-        date: new Date(video.publishedAt).toLocaleDateString(),
-        youtubeId: video.id,
-        thumbnail: video.thumbnail
-      })) || [];
-      
-      setRecordings(formattedRecordings);
+      setRecordings(mockRecordings);
     } catch (error) {
       console.error('Error fetching recordings:', error);
       toast({

@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { supabase } from '@/integrations/supabase/client';
-import { useNavigate, Link } from 'react-router-dom';
+
+import { useLocation, Link } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
 import Navigation from '@/components/Navigation';
 
@@ -14,7 +14,7 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -32,28 +32,23 @@ export default function Register() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-          }
-        }
-      });
+      // For demo purposes, simulate successful registration
+      // This should be replaced with actual authentication
+      if (email && password && fullName) {
 
-      if (error) throw error;
-
-      toast({
-        title: "Account created!",
-        description: "Please check your email to confirm your account.",
-      });
-      
-      navigate('/login');
+        toast({
+          title: "Account created!",
+          description: "You can now sign in with your credentials.",
+        });
+        
+        setLocation('/login');
+      } else {
+        throw new Error('Please fill in all fields');
+      }
     } catch (error: any) {
       toast({
         title: "Registration failed",
-        description: error.message,
+        description: error.message || 'Please check your information',
         variant: "destructive",
       });
     } finally {

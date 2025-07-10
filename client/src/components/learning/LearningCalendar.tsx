@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Users, Video } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+
 import { useToast } from "@/hooks/use-toast";
 
 interface Meeting {
@@ -30,12 +30,27 @@ export const LearningCalendar = ({ onJoinMeeting }: LearningCalendarProps) => {
   useEffect(() => {
     const fetchMeetings = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('zoom-meetings', {
-          body: { action: 'list' }
-        });
-
-        if (error) throw error;
-        setMeetings(data.meetings || []);
+        // Mock data for demonstration - replace with actual API call
+        const mockMeetings = [
+          {
+            id: "1",
+            topic: "General English Conversation",
+            startTime: new Date(Date.now() + 3600000).toISOString(),
+            duration: 60,
+            joinUrl: "https://zoom.us/j/demo",
+            status: "waiting"
+          },
+          {
+            id: "2", 
+            topic: "CEFR Platinum Session",
+            startTime: new Date(Date.now() + 7200000).toISOString(),
+            duration: 90,
+            joinUrl: "https://zoom.us/j/demo2",
+            status: "waiting"
+          }
+        ];
+        
+        setMeetings(mockMeetings);
       } catch (error) {
         console.error('Error fetching meetings for calendar:', error);
         // Don't show toast error here as it might be redundant with LiveClasses component
